@@ -1,43 +1,37 @@
 import React, { useState } from 'react';
 
-const SearchBar = () => {
 
-};
+// endrer til funksjoner sånn at vi får brukt 
+//use State
+const SearchBar = ({ onFormSubmit }) => {
+    const [term, setTerm] = useState('');
 
-class SearchBar extends React.Component {
-    // initierer state
-    state = { term: ''};
-
-    onInputChange = event => {
-        this.setState({ term: event.target.value})
+    const onInputChange = (event) => {
+        setTerm(event.target.value);
     };
 
-    onFormSubmit = event => {
+    const onSubmit = (event) => {
         // stopper siden i å reloade ved enter trykk
         event.preventDefault();
 
-        this.props.onFormSubmit(this.state.term);
+        onFormSubmit(term);
 
-        // TODO: husk å call
-        // callback fra parent komponent
-    };
-
-    render() {
-        return (
-            <div className="search-bar ui segment">
-                <form onSubmit={this.onFormSubmit} className="ui form">
-                    <div className="field">
-                        <label>Video Search</label>
-                        {/* lag kontrollert input */}
-                        <input type="text"
-                        value={this.state.term}
-                        onChange={this.onInputChange}
-                        />
-                    </div>
-                </form>
+};
+return (
+    <div className="search-bar ui segment">
+        <form onSubmit={onSubmit} className="ui form">
+            <div className="field">
+                <label>Video Search</label>
+                {/* lag kontrollert input */}
+                <input 
+                type="text"
+                value={term}
+                onChange={onInputChange}
+                />
             </div>
-        );
-    }
-}
+        </form>
+    </div>
+);
+};
 
 export default SearchBar;
