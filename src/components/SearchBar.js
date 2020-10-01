@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+const SearchBar = () => {
+
+};
 
 class SearchBar extends React.Component {
     // initierer state
