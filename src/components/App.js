@@ -1,41 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import SearchBar from './SearchBar';
-import youtube from '../apis/youtube';
 import VideoList from './VideoList';
 import VideoDetail from './VideoDetail';
+import useVideos from '../hooks/useVideos';
 
-//Lagt til hooks
-
+//Lagt til hooks isteden for class based components
+// implementere custom hooks for å bruke logikk i to forskjellige
+// komponenter
+// når du har data fetching så bruk custom hooks
 const App = () => {
-    const [videos, setVideos] = useState([]);
+    
+    // denne useState håndterer nåværende valgt video
     const [selectedVideo, setSelectedVideo] = useState(null);
-    // gjør at det er noe default på siden
+    const [videos, search] = useVideos('destiny 2');
+    
+    // Hver gang vi søker ny video så kjører denne 
+    // så setter vi ny liste med setSelectedvideo
     useEffect(() => {
-        onTermSubmit('destiny 2')
-    }, []);
+        setSelectedVideo(videos[0]);
 
-    // søke funksjonen
-    const onTermSubmit = async term => {
-        const response = await youtube.get('/search', {
-             params: {
-                 q: term
-             }
-         });
-         // resultat av søket
-         setVideos(response.data.items);
-         setSelectedVideo(response.data.items[0])
-         
-     };
-         // callback arrow funksjon
-    // dette må igjen refereres som props i render funksjonen
-    const onVideoSelect = video => {
-        setSelectedVideo(video);
-    };
+    }, [videos])
+   
+
+
+
     return (
         // vi henter grid system fra semantic UI
         // container gjør at searchbar ikke strekker over hele siden (margin på sidene)
     <div className="ui container">
-        <SearchBar onFormSubmit={onTermSubmit} />
+        <SearchBar onFormSubmit={search} />
         <div className="ui grid">
             <div className="ui row">
                 <div className="eleven wide column">
@@ -43,9 +36,10 @@ const App = () => {
                 </div>
                 <div className="five wide column">
                 <VideoList
-                onVideoSelect={onVideoSelect} 
+                onVideoSelect={setSelectedVideo} 
                 videos={videos} 
-                /></div>
+                />
+                </div>
                 
             </div>
          </div>
